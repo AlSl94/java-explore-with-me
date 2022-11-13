@@ -1,15 +1,15 @@
 version: '3.1'
 
 services:
-#  stats-server:
-#    build: stats-server
-#    container_name: statistics
-#    ports:
-#      - "9090:9090"
-#    depends_on:
-#      - stats-db
-#    environment:
-#      - EWM_SERVICE_URL=http://ewm-service:8080
+  stats-server:
+    build: stats-server
+    container_name: statistics
+    ports:
+      - "9090:9090"
+    depends_on:
+      - stats-db
+    environment:
+      - EWM_SERVICE_URL=http://ewm-service:8080
 
   stats-db:
     image: postgres:14-alpine
@@ -21,16 +21,16 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-#  ewm-service:
-#    build: ewm-service
-#    container_name: exploreWithMe_service
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - ewm-db
-#      - stats-server
-#    environment:
-#      - STATS-SERVER_URL=http://stats-server:9090
+  ewm-service:
+    build: ewm-service
+    container_name: exploreWithMe_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ewm-db
+      - stats-server
+    environment:
+      - STATS-SERVER_URL=http://stats-server:9090
 
   ewm-db:
     image: postgres:14-alpine
