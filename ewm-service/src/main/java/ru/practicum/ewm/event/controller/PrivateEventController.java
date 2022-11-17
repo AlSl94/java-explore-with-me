@@ -1,9 +1,11 @@
-package ru.practicum.ewm.event;
+package ru.practicum.ewm.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.event.EventService;
+import ru.practicum.ewm.event.dao.EventDao;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
@@ -16,6 +18,8 @@ import java.util.List;
 @RequestMapping
 @RequiredArgsConstructor
 public class PrivateEventController {
+
+    private final EventService eventService;
 
     @GetMapping(value = "/users/{userId}/events")
     List<EventShortDto> userEvents(@PathVariable Long userId,

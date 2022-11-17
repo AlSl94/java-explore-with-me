@@ -2,34 +2,33 @@ package ru.practicum.ewm.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.user.dto.UserDto;
-import ru.practicum.ewm.user.dto.UserShortDto;
 
 import java.util.List;
 
 @Slf4j
-@Validated
 @RestController
 @RequestMapping(path = "/admin/users")
 @RequiredArgsConstructor
 public class UserAdminController {
 
+    private final UserService userService;
+
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam Long ids,
+    public List<UserDto> getUsers(@RequestParam List<Long> ids,
                                   @RequestParam(defaultValue = "0") int from,
                                   @RequestParam(defaultValue = "10") int size) {
-        return null;
+        return userService.getUsers(ids, from, size);
     }
 
     @PostMapping
-    public UserDto createUser(UserShortDto dto) {
-        return null;
+    public UserDto createUser(@RequestBody UserDto dto) {
+        return userService.createUser(dto);
     }
 
     @DeleteMapping(value = "/{userId}")
-    public void delete(@PathVariable Long userId) {
-
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
     }
 }
