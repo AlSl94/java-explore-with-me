@@ -11,21 +11,23 @@ import ru.practicum.ewm.category.dto.CategoryDto;
 @RestController
 @RequestMapping(path = "/admin/categories")
 @RequiredArgsConstructor
-public class CategoryAdminController { // TODO
+public class CategoryAdminController {
+
+    private final CategoryService categoryService;
 
     @PatchMapping
-    CategoryDto updateCategory(@RequestBody CategoryDto category) {
-        return null;
+    public CategoryDto updateCategory(@RequestBody CategoryDto category) {
+        return categoryService.updateCategory(category);
     }
 
     @PostMapping
-    CategoryDto createCategory(@RequestBody CategoryDto category) {
-        return null;
+    public CategoryDto createCategory(@RequestBody CategoryDto category) {
+        return categoryService.createCategory(category);
     }
 
     @DeleteMapping(value = "/{catId}")
-    void deleteCategory(@PathVariable Long catId) {
-
+    public void deleteCategory(@PathVariable Long catId) {
+        categoryService.deleteCategory(catId);
     }
 
 }

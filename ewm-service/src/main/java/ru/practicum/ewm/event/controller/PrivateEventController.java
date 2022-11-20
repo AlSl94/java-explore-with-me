@@ -25,50 +25,50 @@ public class PrivateEventController {
     List<EventShortDto> userEvents(@PathVariable Long userId,
                                    @RequestParam(defaultValue = "0") int from,
                                    @RequestParam(defaultValue = "10") int size) {
-        return null;
+        return eventService.userEvents(userId, from, size);
     }
 
     @PatchMapping(value = "/users/{userId}/events")
     EventShortDto updateEvent(@PathVariable Long userId,
                               @RequestBody EventShortDto event) {
-        return null;
+        return eventService.updateEvent(userId, event);
     }
 
 
     @PostMapping(value = "/users/{userId}/events")
     EventFullDto createEvent(@PathVariable Long userId,
                              @RequestBody EventFullDto event) {
-        return null;
+        return eventService.createEvent(userId, event);
     }
 
     @GetMapping(value = "/users/{userId}/events/{eventId}")
     EventFullDto getEventByUserIdAndEventId(@PathVariable Long userId,
                                             @PathVariable Long eventId) {
-        return null;
+        return eventService.getEventByUserIdAndEventId(userId, eventId);
     }
 
     @PatchMapping(value = "/users/{userId}/events/{eventId}")
     EventFullDto cancelEventByUserIdAndEventId(@PathVariable Long userId,
                                                @PathVariable Long eventId) {
-        return null;
+        return eventService.cancelEventByUserIdAndEventId(userId, eventId);
     }
 
     @GetMapping(value = "/users/{userId}/events/{eventId}/requests")
     ParticipationRequestDto getRequestInfoByUserIdAndEvenId(@PathVariable Long userId,
                                                             @PathVariable Long eventId) {
-        return null;
+        return eventService.getRequestInfoByUserIdAndEvenId(userId, eventId);
     }
 
     @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/confirm")
     ParticipationRequestDto confirmParticipationRequest(@PathVariable Long userId,
                                                         @PathVariable Long eventId,
                                                         @PathVariable Long reqId) {
-        return null;
+        return eventService.confirmParticipationRequest(userId, eventId, reqId);
     }
     @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/reject")
     ParticipationRequestDto rejectParticipationRequest(@PathVariable Long userId,
                                                        @PathVariable Long eventId,
                                                        @PathVariable Long reqId) {
-        return null;
+        return eventService.rejectParticipationRequest(userId, eventId, reqId);
     }
 }
