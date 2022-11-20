@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.event.EventService;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
-import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
 
 import java.util.List;
 
@@ -50,24 +49,5 @@ public class PrivateEventController {
     EventFullDto cancelEventByUserIdAndEventId(@PathVariable Long userId,
                                                @PathVariable Long eventId) {
         return eventService.cancelEventByUserIdAndEventId(userId, eventId);
-    }
-
-    @GetMapping(value = "/users/{userId}/events/{eventId}/requests")
-    ParticipationRequestDto getRequestInfoByUserIdAndEvenId(@PathVariable Long userId,
-                                                            @PathVariable Long eventId) {
-        return eventService.getRequestInfoByUserIdAndEvenId(userId, eventId);
-    }
-
-    @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/confirm")
-    ParticipationRequestDto confirmParticipationRequest(@PathVariable Long userId,
-                                                        @PathVariable Long eventId,
-                                                        @PathVariable Long reqId) {
-        return eventService.confirmParticipationRequest(userId, eventId, reqId);
-    }
-    @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/reject")
-    ParticipationRequestDto rejectParticipationRequest(@PathVariable Long userId,
-                                                       @PathVariable Long eventId,
-                                                       @PathVariable Long reqId) {
-        return eventService.rejectParticipationRequest(userId, eventId, reqId);
     }
 }

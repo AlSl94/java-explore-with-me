@@ -10,9 +10,6 @@ import ru.practicum.ewm.event.dao.EventDao;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.model.Event;
-import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
-import ru.practicum.ewm.user.dao.UserDao;
-import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.utility.FromSizeRequest;
 
 import java.util.List;
@@ -23,20 +20,19 @@ import java.util.List;
 public class EventService {
 
     private final EventDao eventDao;
-    private final UserDao userDao;
 
 
     public List<EventShortDto> initiatorEvents(Long userId, int from, int size) {
-        User user = userDao.findById(userId).orElseThrow();
         Pageable pageable = FromSizeRequest.of(from, size);
 
-        List<Event> events = eventDao.findByInitiator(user, pageable);
+        List<Event> events = eventDao.findByInitiatorId(userId, pageable);
 
         return EventMapper.toEventDtoList(events);
     }
 
     @Transactional
     public EventShortDto updateEvent(Long userId, EventShortDto eventDto) {
+
         Event event = eventDao.findById(eventDto.getId())
                 .orElseThrow(() ->
                         new WrongParameterException("События с id {" + eventDto.getId() + "} не существует."));
@@ -52,55 +48,56 @@ public class EventService {
                     + event.getInitiator().getId());
         }
 
-//        private Integer confirmedRequests;
-//        private LocalDateTime eventDate;
-//        private Long id;
-//        private UserShortDto initiator;
-//        private Boolean paid;
-//        private String title;
-//        private Integer views;
-
         if (eventDto.getAnnotation() != null) {
             event.setAnnotation(eventDto.getAnnotation());
         }
         if (eventDto.getCategory() != null) {
             event.setCategory(CategoryMapper.toCategory(eventDto.getCategory()));
         }
+        if (eventDto.getConfirmedRequests() != null) {
+            event.setConfirmedRequests(eventDto.getConfirmedRequests());
+        }
         if (eventDto.getEventDate() != null) {
             event.setEventDate(eventDto.getEventDate());
         }
-        if (event.getRequestModeration() != null) {
-            event.setRequestModeration(event.getRequestModeration());
+        if (eventDto.getPaid() != null) {
+            event.setPaid(eventDto.getPaid());
         }
-        return null;
+        if (eventDto.getTitle() != null) {
+            event.setTitle(eventDto.getTitle());
+        }
+
+        event = eventDao.save(event);
+
+        return EventMapper.toEventShortDto(event);
     }
 
+    @Transactional
     public EventFullDto createEvent(Long userId, EventFullDto eventDto) {
-        return null;
+
+        Event event = EventMapper.toEvent(eventDto);
+
+        if (event.getInitiator().getId() != userId) {
+            throw new WrongParameterException("Создать событие может только пользователь с id "
+                    + event.getInitiator().getId());
+        }
+
+        event = eventDao.save(event);
+
+        return EventMapper.toFullEventDto(event);
     }
 
 
     public EventFullDto getEventByUserIdAndEventId(Long userId, Long eventId) {
-        return null;
+        Event event = eventDao.findByIdAndInitiatorId(eventId, userId);
+        return EventMapper.toFullEventDto(event);
     }
 
-
+    @Transactional
     public EventFullDto cancelEventByUserIdAndEventId(Long userId, Long eventId) {
-        return null;
+        Event event = eventDao.findByIdAndInitiatorId(eventId, userId);
+        event.setState(EventState.CANCELED);
+        return EventMapper.toFullEventDto(event);
     }
 
-
-    public ParticipationRequestDto getRequestInfoByUserIdAndEvenId(Long userId, Long eventId) {
-        return null;
-    }
-
-
-    public ParticipationRequestDto confirmParticipationRequest(Long userId, Long eventId, Long reqId) {
-        return null;
-    }
-
-
-    public ParticipationRequestDto rejectParticipationRequest(Long userId, Long eventId, Long reqId) {
-        return null;
-    }
 }

@@ -24,13 +24,33 @@ public class PrivateRequestController {
 
     @PostMapping(value = "/users/{userId}/requests")
     public ParticipationRequestDto addNewRequest(@PathVariable Long userId,
-                                          @RequestParam Long eventId) {
+                                                 @RequestParam Long eventId) {
         return requestService.addNewRequest(userId, eventId);
     }
 
     @PatchMapping(value = "/users/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable Long requestId,
-                                              @PathVariable Long userId) {
-            return requestService.cancelRequest(requestId, userId);
-        }
+                                                 @PathVariable Long userId) {
+        return requestService.cancelRequest(requestId, userId);
+    }
+
+    @GetMapping(value = "/users/{userId}/events/{eventId}/requests")
+    ParticipationRequestDto getRequestInfoByUserIdAndEventId(@PathVariable Long userId,
+                                                             @PathVariable Long eventId) {
+        return requestService.getRequestInfoByUserIdAndEventId(userId, eventId);
+    }
+
+    @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/confirm")
+    ParticipationRequestDto confirmParticipationRequest(@PathVariable Long userId,
+                                                        @PathVariable Long eventId,
+                                                        @PathVariable Long reqId) {
+        return requestService.confirmParticipationRequest(userId, eventId, reqId);
+    }
+
+    @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/reject")
+    ParticipationRequestDto rejectParticipationRequest(@PathVariable Long userId,
+                                                       @PathVariable Long eventId,
+                                                       @PathVariable Long reqId) {
+        return requestService.rejectParticipationRequest(userId, eventId, reqId);
+    }
 }

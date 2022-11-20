@@ -28,6 +28,7 @@ public class RequestService {
         return RequestMapper.requestDtoList(requests);
     }
 
+    @Transactional
     public ParticipationRequestDto addNewRequest(Long userId, Long eventId) {
 
         Request request = new Request();
@@ -41,6 +42,7 @@ public class RequestService {
         return RequestMapper.requestToDto(request);
     }
 
+    @Transactional
     public ParticipationRequestDto cancelRequest(Long requestId, Long userId) {
 
         Request request = requestDao.findById(requestId)
@@ -57,8 +59,24 @@ public class RequestService {
         return RequestMapper.requestToDto(request);
     }
 
-    public Integer numberOfRequests(Long eventId, RequestStatus requestStatus) {
-        return requestDao.countByEventIdAndStatus(eventId, requestStatus);
+    public ParticipationRequestDto getRequestInfoByUserIdAndEventId(Long userId, Long eventId) {
+        Request request = requestDao.findByEventIdAndRequesterId(eventId, userId);
+        return RequestMapper.requestToDto(request);
     }
 
+    @Transactional
+    public ParticipationRequestDto confirmParticipationRequest(Long userId, Long eventId, Long reqId) { //todo validation
+        Request request = requestDao.findByEventIdAndRequesterIdAndId(eventId, userId, reqId);
+        request.setStatus(RequestStatus.CONFIRMED);
+        request = requestDao.save(request);
+        return RequestMapper.requestToDto(request);
+    }
+
+    @Transactional
+    public ParticipationRequestDto rejectParticipationRequest(Long userId, Long eventId, Long reqId) { // todo
+        Request request = requestDao.findByEventIdAndRequesterIdAndId(eventId, userId, reqId);
+        request.setStatus(RequestStatus.REJECTED);
+        request = requestDao.save(request);
+        return RequestMapper.requestToDto(request);
+    }
 }

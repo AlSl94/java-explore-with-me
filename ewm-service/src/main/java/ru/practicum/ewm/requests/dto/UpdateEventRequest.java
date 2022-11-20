@@ -1,8 +1,8 @@
 package ru.practicum.ewm.requests.dto;
 
 import lombok.*;
-import ru.practicum.ewm.event.dto.Location;
 import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.event.dto.Location;
 
 import java.time.LocalDateTime;
 

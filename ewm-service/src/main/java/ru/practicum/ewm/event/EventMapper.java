@@ -2,14 +2,11 @@ package ru.practicum.ewm.event;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.category.CategoryMapper;
-import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.Location;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.UserMapper;
-import ru.practicum.ewm.user.dto.UserShortDto;
-import ru.practicum.ewm.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,6 @@ public class EventMapper {
                 .requestModeration(event.getRequestModeration())
                 .state(event.getState())
                 .title(event.getTitle())
-                .views(1) // TODO
                 .build();
     }
 
@@ -51,7 +47,6 @@ public class EventMapper {
                 .initiator(UserMapper.toShortUserDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
-                .views(1) // TODO
                 .build();
     }
 

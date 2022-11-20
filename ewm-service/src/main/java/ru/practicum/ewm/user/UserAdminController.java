@@ -26,7 +26,7 @@ public class UserAdminController {
 
     @PostMapping
     public UserDto createUser(@RequestBody UserDto dto) {
-        UserDto userDto =  userService.createUser(dto);
+        UserDto userDto = userService.createUser(dto);
         log.info("Пользователь с id {} создан", userDto.getId());
         return userDto;
     }
