@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
 
+import java.util.List;
+
 @Slf4j
 @Validated
 @RestController
@@ -13,20 +15,22 @@ import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
 @RequiredArgsConstructor
 public class PrivateRequestController {
 
+    private final RequestService requestService;
+
     @GetMapping(value = "/users/{userId}/requests")
-    ParticipationRequestDto getUserRequests(@PathVariable Long userId) {
-        return null;
+    public List<ParticipationRequestDto> getUserRequests(@PathVariable Long userId) {
+        return requestService.getUserRequests(userId);
     }
 
     @PostMapping(value = "/users/{userId}/requests")
-    ParticipationRequestDto addNewRequest(@PathVariable Long userId,
+    public ParticipationRequestDto addNewRequest(@PathVariable Long userId,
                                           @RequestParam Long eventId) {
-        return null;
+        return requestService.addNewRequest(userId, eventId);
     }
 
     @PatchMapping(value = "/users/{userId}/requests/{requestId}/cancel")
-        ParticipationRequestDto cancelRequest(@PathVariable Long requestId,
+    public ParticipationRequestDto cancelRequest(@PathVariable Long requestId,
                                               @PathVariable Long userId) {
-            return null;
+            return requestService.cancelRequest(requestId, userId);
         }
 }

@@ -1,10 +1,14 @@
 package ru.practicum.ewm.event;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.practicum.ewm.category.CategoryService;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.Location;
+import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.dto.UserShortDto;
@@ -20,26 +24,25 @@ public class EventMapper {
     private EventMapper() {
     }
 
-    public static EventFullDto toFullEventDto(Event event) {
+    public static EventFullDto toFullEventDto(Event event, CategoryDto categoryDto) {
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
-                .category(event.getCategoryId())
+                .category(categoryDto)
                 .build();
-        private CategoryDto ;
-        private Integer confirmedRequests;
-        private LocalDateTime createdOn;
-        private String description;
-        private LocalDateTime eventDate;
-        private Long id;
-        private UserShortDto initiator;
-        private Location location;
-        private Boolean paid;
-        private Integer participantLimit;
-        private LocalDateTime publishedOn;
-        private Boolean requestModeration;
-        private String state;
-        private String title;
-        private Integer views;
+//        private Integer confirmedRequests;
+//        private LocalDateTime createdOn;
+//        private String description;
+//        private LocalDateTime eventDate;
+//        private Long id;
+//        private UserShortDto initiator;
+//        private Location location;
+//        private Boolean paid;
+//        private Integer participantLimit;
+//        private LocalDateTime publishedOn;
+//        private Boolean requestModeration;
+//        private String state;
+//        private String title;
+//        private Integer views;
     }
 
     public static EventShortDto toEventShortDto(Event event) {

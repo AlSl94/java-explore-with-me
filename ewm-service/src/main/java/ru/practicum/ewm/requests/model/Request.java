@@ -1,6 +1,7 @@
 package ru.practicum.ewm.requests.model;
 
 import lombok.*;
+import ru.practicum.ewm.requests.RequestStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,5 +25,5 @@ public class Request {
     @Column
     private Long requestorId;
     @Column
-    private String status;
+    private RequestStatus status;
 }

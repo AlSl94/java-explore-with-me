@@ -19,34 +19,39 @@ public class EventService {
 
 
     public List<EventShortDto> userEvents(Long userId, int from, int size) {
-
+        return null;
     }
 
     public EventShortDto updateEvent(Long userId, EventShortDto event) {
+        return null;
     }
 
     public EventFullDto createEvent(Long userId, EventFullDto event) {
-        Event event = Event
-         = eventDao.save(event);
+        return null;
     }
 
 
     public EventFullDto getEventByUserIdAndEventId(Long userId, Long eventId) {
+        return null;
     }
 
 
     public EventFullDto cancelEventByUserIdAndEventId(Long userId, Long eventId) {
+        return null;
     }
 
 
     public ParticipationRequestDto getRequestInfoByUserIdAndEvenId(Long userId, Long eventId) {
+        return null;
     }
 
 
     public ParticipationRequestDto confirmParticipationRequest(Long userId, Long eventId, Long reqId) {
+        return null;
     }
 
 
     public ParticipationRequestDto rejectParticipationRequest(Long userId, Long eventId, Long reqId) {
+        return null;
     }
 }
