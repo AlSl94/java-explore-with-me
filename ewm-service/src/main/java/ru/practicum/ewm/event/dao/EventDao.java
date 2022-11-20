@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EventDao extends JpaRepository<Event, Long> {
 
-    List<Event> findByInitiatorId(Long initiatorId, Pageable pageable);
+    List<Event> findByInitiatorId(Long initiatorId, Pageable pageable);  //TODO RC REF COMPARISON
 
-    Event findByIdAndInitiatorId(Long eventId, Long initiatorId);
+    Event findByIdAndInitiatorId(Long eventId, Long initiatorId); //TODO RC REF COMPARISON
 }

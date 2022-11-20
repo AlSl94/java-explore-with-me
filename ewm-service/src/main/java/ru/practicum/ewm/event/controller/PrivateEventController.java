@@ -23,31 +23,41 @@ public class PrivateEventController {
     List<EventShortDto> initiatorEvents(@PathVariable Long userId,
                                         @RequestParam(defaultValue = "0") int from,
                                         @RequestParam(defaultValue = "10") int size) {
-        return eventService.initiatorEvents(userId, from, size);
+        List<EventShortDto> events = eventService.initiatorEvents(userId, from, size);
+        log.info("Получены события {} пользователя {}", events, userId);
+        return events;
     }
 
     @PatchMapping(value = "/users/{userId}/events")
     EventShortDto updateEvent(@PathVariable Long userId,
                               @RequestBody EventShortDto event) {
-        return eventService.updateEvent(userId, event);
+        EventShortDto dto = eventService.updateEvent(userId, event);
+        log.info("Обновлено событие, {}", dto);
+        return dto;
     }
 
 
     @PostMapping(value = "/users/{userId}/events")
     EventFullDto createEvent(@PathVariable Long userId,
                              @RequestBody EventFullDto event) {
-        return eventService.createEvent(userId, event);
+        EventFullDto dto = eventService.createEvent(userId, event);
+        log.info("Создано событие, {}", dto);
+        return dto;
     }
 
     @GetMapping(value = "/users/{userId}/events/{eventId}")
     EventFullDto getEventByUserIdAndEventId(@PathVariable Long userId,
                                             @PathVariable Long eventId) {
-        return eventService.getEventByUserIdAndEventId(userId, eventId);
+        EventFullDto dto = eventService.getEventByUserIdAndEventId(userId, eventId);
+        log.info("Получено событие {} по userId {} и eventId {}", dto, userId, eventId);
+        return dto;
     }
 
     @PatchMapping(value = "/users/{userId}/events/{eventId}")
     EventFullDto cancelEventByUserIdAndEventId(@PathVariable Long userId,
                                                @PathVariable Long eventId) {
-        return eventService.cancelEventByUserIdAndEventId(userId, eventId);
+        EventFullDto dto = eventService.cancelEventByUserIdAndEventId(userId, eventId);
+        log.info("Отменена события {} по userId {} и eventId {}", dto, userId, eventId);
+        return dto;
     }
 }

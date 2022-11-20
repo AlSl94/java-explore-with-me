@@ -13,6 +13,7 @@ import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.utility.FromSizeRequest;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,7 +36,7 @@ public class EventService {
 
         Event event = eventDao.findById(eventDto.getId())
                 .orElseThrow(() ->
-                        new WrongParameterException("События с id {" + eventDto.getId() + "} не существует."));
+                        new WrongParameterException("События с id " + eventDto.getId() + " не существует."));
 
         if (event.getState() == EventState.REJECTED || event.getState() == EventState.UNSUPPORTED_STATE
                 || event.getState() == EventState.PUBLISHED) {
@@ -43,7 +44,7 @@ public class EventService {
                     "или события в состоянии ожидания модерации");
         }
 
-        if (event.getInitiator().getId() != userId) {
+        if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new WrongParameterException("Обновить событие может только пользователь с id "
                     + event.getInitiator().getId());
         }
@@ -77,8 +78,8 @@ public class EventService {
 
         Event event = EventMapper.toEvent(eventDto);
 
-        if (event.getInitiator().getId() != userId) {
-            throw new WrongParameterException("Создать событие может только пользователь с id "
+        if (!Objects.equals(event.getInitiator().getId(), userId)) {
+            throw new WrongParameterException("Cоздать событие может только пользователь с id "
                     + event.getInitiator().getId());
         }
 
@@ -99,5 +100,7 @@ public class EventService {
         event.setState(EventState.CANCELED);
         return EventMapper.toFullEventDto(event);
     }
+
+
 
 }

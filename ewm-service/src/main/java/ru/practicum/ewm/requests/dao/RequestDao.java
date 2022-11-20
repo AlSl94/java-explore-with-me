@@ -11,5 +11,5 @@ public interface RequestDao extends JpaRepository<Request, Long> {
 
     Request findByEventIdAndRequesterId(Long eventId, Long userId);
 
-    Request findByEventIdAndRequesterIdAndId(Long eventId, Long userId, Long reqId);
+    Request findByEventIdAndRequesterIdAndId(Long eventId, Long userId, Long reqId);  //TODO RC REF COMPARISON
 }

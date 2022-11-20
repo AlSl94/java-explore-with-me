@@ -12,6 +12,7 @@ import ru.practicum.ewm.user.dao.UserDao;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,13 +44,13 @@ public class RequestService {
     }
 
     @Transactional
-    public ParticipationRequestDto cancelRequest(Long requestId, Long userId) {
+    public ParticipationRequestDto cancelRequest(Long reqId, Long userId) {
 
-        Request request = requestDao.findById(requestId)
-                .orElseThrow(() -> new WrongParameterException("Запрос с id {" + requestId + "} не найден"));
+        Request request = requestDao.findById(reqId)
+                .orElseThrow(() -> new WrongParameterException("Запрос с id " + reqId + " не найден"));
 
-        if (request.getRequester().getId() != userId) {
-            throw new WrongParameterException("Пользователь с id {" + userId + "} создателем запроса");
+        if (!Objects.equals(request.getRequester().getId(), userId)) {
+            throw new WrongParameterException("Пользователь с id " + userId + " создателем запроса");
         }
 
         request.setStatus(RequestStatus.CANCELED);
