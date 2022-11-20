@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.event.EventService;
-import ru.practicum.ewm.event.dao.EventDao;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
@@ -22,10 +21,10 @@ public class PrivateEventController {
     private final EventService eventService;
 
     @GetMapping(value = "/users/{userId}/events")
-    List<EventShortDto> userEvents(@PathVariable Long userId,
-                                   @RequestParam(defaultValue = "0") int from,
-                                   @RequestParam(defaultValue = "10") int size) {
-        return eventService.userEvents(userId, from, size);
+    List<EventShortDto> initiatorEvents(@PathVariable Long userId,
+                                        @RequestParam(defaultValue = "0") int from,
+                                        @RequestParam(defaultValue = "10") int size) {
+        return eventService.initiatorEvents(userId, from, size);
     }
 
     @PatchMapping(value = "/users/{userId}/events")

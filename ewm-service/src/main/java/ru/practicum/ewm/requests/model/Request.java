@@ -1,7 +1,9 @@
 package ru.practicum.ewm.requests.model;
 
 import lombok.*;
+import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.requests.RequestStatus;
+import ru.practicum.ewm.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,10 +22,12 @@ public class Request {
     private Long id;
     @Column
     private LocalDateTime created;
-    @Column
-    private Long eventId;
-    @Column
-    private Long requestorId;
-    @Column
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+    @ManyToOne
+    @JoinColumn(name = "requester_id")
+    private User requester;
+    @Enumerated(EnumType.STRING)
     private RequestStatus status;
 }

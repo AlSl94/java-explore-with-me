@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS events
     id                 BIGINT GENERATED ALWAYS AS IDENTITY,
     annotation         VARCHAR(1000)               NOT NULL,
     description        VARCHAR(9999)               NOT NULL,
+    confirmed_requests INT                         NOT NULL,
     category_id        BIGINT
         CONSTRAINT fk_events_categories_index REFERENCES categories (id) ON DELETE CASCADE,
     title              VARCHAR(255)                NOT NULL,

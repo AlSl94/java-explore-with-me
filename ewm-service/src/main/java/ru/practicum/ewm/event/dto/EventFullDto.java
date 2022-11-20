@@ -2,6 +2,7 @@ package ru.practicum.ewm.event.dto;
 
 import lombok.*;
 import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class EventFullDto {
     private Integer participantLimit;
     private LocalDateTime publishedOn;
     private Boolean requestModeration;
-    private String state;
+    private EventState state;
     private String title;
     private Integer views;
 }
