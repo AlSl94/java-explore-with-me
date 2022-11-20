@@ -32,15 +32,17 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDto addNewRequest(Long userId, Long eventId) {
 
-        Request request = new Request();
-        request.setRequester(userDao.findById(userId).orElseThrow(() -> new WrongParameterException("Wrong User id")));
-        request.setEvent(eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException(("Wrong event id"))));
-        request.setCreated(LocalDateTime.now());
-        request.setStatus(RequestStatus.PENDING);
+//        Request request = new Request();
+//        request.setRequester(userDao.findById(userId).orElseThrow(() -> new WrongParameterException("Wrong User id")));
+//        request.setEvent(eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException(("Wrong event id"))));
+//        request.setCreated(LocalDateTime.now());
+//        request.setStatus(RequestStatus.PENDING);
+//
+//        requestDao.save(request);
+//
+//        return RequestMapper.requestToDto(request);
 
-        requestDao.save(request);
-
-        return RequestMapper.requestToDto(request);
+        return null;
     }
 
     @Transactional

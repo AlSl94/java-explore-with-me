@@ -1,9 +1,6 @@
 package ru.practicum.ewm.event.dto;
 
 import lombok.*;
-import ru.practicum.ewm.category.dto.CategoryDto;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,9 +9,9 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class NewEventDto {
     private String annotation;
-    private CategoryDto category;
+    private Long category;
     private String description;
-    private LocalDateTime eventDate;
+    private String eventDate;
     private Location location;
     private Boolean paid;
     private Integer participantLimit;

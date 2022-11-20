@@ -5,8 +5,6 @@ import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.user.dto.UserShortDto;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -16,15 +14,15 @@ public class EventFullDto {
     private String annotation;
     private CategoryDto category;
     private Integer confirmedRequests;
-    private LocalDateTime createdOn;
+    private String createdOn;
     private String description;
-    private LocalDateTime eventDate;
+    private String eventDate;
     private Long id;
     private UserShortDto initiator;
     private Location location;
     private Boolean paid;
     private Integer participantLimit;
-    private LocalDateTime publishedOn;
+    private String publishedOn;
     private Boolean requestModeration;
     private EventState state;
     private String title;

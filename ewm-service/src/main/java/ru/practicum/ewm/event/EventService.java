@@ -5,13 +5,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.category.CategoryMapper;
+import ru.practicum.ewm.category.CategoryService;
 import ru.practicum.ewm.error.WrongParameterException;
 import ru.practicum.ewm.event.dao.EventDao;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.user.dao.UserDao;
+import ru.practicum.ewm.utility.Constants;
 import ru.practicum.ewm.utility.FromSizeRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +26,8 @@ import java.util.Objects;
 public class EventService {
 
     private final EventDao eventDao;
+    private final CategoryService categoryService;
+    private final UserDao userDao;
 
 
     public List<EventShortDto> initiatorEvents(Long userId, int from, int size) {
@@ -28,7 +35,7 @@ public class EventService {
 
         List<Event> events = eventDao.findByInitiatorId(userId, pageable);
 
-        return EventMapper.toEventDtoList(events);
+        return EventMapper.toShortEventDtoList(events);
     }
 
     @Transactional
@@ -53,7 +60,7 @@ public class EventService {
             event.setAnnotation(eventDto.getAnnotation());
         }
         if (eventDto.getCategory() != null) {
-            event.setCategory(CategoryMapper.toCategory(eventDto.getCategory()));
+            event.setCategory(CategoryMapper.toCategory(categoryService.getCategoryById(event.getId())));
         }
         if (eventDto.getConfirmedRequests() != null) {
             event.setConfirmedRequests(eventDto.getConfirmedRequests());
@@ -74,17 +81,17 @@ public class EventService {
     }
 
     @Transactional
-    public EventFullDto createEvent(Long userId, EventFullDto eventDto) {
+    public EventFullDto createEvent(Long userId, NewEventDto eventDto) {
 
-        Event event = EventMapper.toEvent(eventDto);
+        Event event = EventMapper.toEventFromNew(eventDto);
 
-        if (!Objects.equals(event.getInitiator().getId(), userId)) {
-            throw new WrongParameterException("Cоздать событие может только пользователь с id "
-                    + event.getInitiator().getId());
-        }
+        event.setCategory(CategoryMapper.toCategory(categoryService.getCategoryById(eventDto.getCategory())));
+        event.setPublishedOn(LocalDateTime.now());
+        event.setInitiator(userDao.findById(userId).orElseThrow());
+        event.setConfirmedRequests(0);
+        event.setState(EventState.PENDING);
 
         event = eventDao.save(event);
-
         return EventMapper.toFullEventDto(event);
     }
 
@@ -102,5 +109,61 @@ public class EventService {
     }
 
 
+    public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
+                                         String rangeStart, String rangeEnd, int from, int size) {
+        //TODO тупит обработка states
 
+        Pageable pageable = FromSizeRequest.of(from, size);
+        LocalDateTime start = LocalDateTime.parse(rangeStart, Constants.TIME_FORMATTER);
+        LocalDateTime end = LocalDateTime.parse(rangeEnd, Constants.TIME_FORMATTER);
+        List<Event> events = eventDao.findEvents(users, states, categories, start, end, pageable);
+
+        return EventMapper.toFullEventDtoList(events);
+    }
+
+    public EventFullDto adminUpdateEvent(Long eventId, NewEventDto eventDto) {
+        Event event = eventDao.findById(eventId)
+                .orElseThrow(() ->
+                        new WrongParameterException("События с id " + eventId + " не существует."));
+
+        if (eventDto.getAnnotation() != null) {
+            event.setAnnotation(eventDto.getAnnotation());
+        }
+        if (eventDto.getDescription() != null) {
+            event.setDescription(eventDto.getDescription());
+        }
+        if (eventDto.getLocation() != null) {
+            event.setLat(eventDto.getLocation().getLat());
+            event.setLon(eventDto.getLocation().getLon());
+        }
+        if (eventDto.getPaid() != null) {
+            event.setPaid(eventDto.getPaid());
+        }
+        if (eventDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(eventDto.getParticipantLimit());
+        }
+        if (eventDto.getRequestModeration() != null) {
+            event.setRequestModeration(eventDto.getRequestModeration());
+        }
+        if (eventDto.getTitle() != null) {
+            event.setTitle(eventDto.getTitle());
+        }
+        event = eventDao.save(event);
+
+        return EventMapper.toFullEventDto(event);
+    }
+
+    public EventFullDto publishEvent(Long eventId) {
+        Event event = eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException("Неверный id события"));
+        event.setState(EventState.PUBLISHED);
+
+        return EventMapper.toFullEventDto(event);
+    }
+
+    public EventFullDto rejectEvent(Long eventId) {
+        Event event = eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException("Неверный id события"));
+        event.setState(EventState.REJECTED);
+
+        return EventMapper.toFullEventDto(event);
+    }
 }

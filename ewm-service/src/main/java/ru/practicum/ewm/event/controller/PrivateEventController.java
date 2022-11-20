@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.event.EventService;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.NewEventDto;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class PrivateEventController {
 
     @PostMapping(value = "/users/{userId}/events")
     EventFullDto createEvent(@PathVariable Long userId,
-                             @RequestBody EventFullDto event) {
+                             @RequestBody NewEventDto event) {
         EventFullDto dto = eventService.createEvent(userId, event);
         log.info("Создано событие, {}", dto);
         return dto;
