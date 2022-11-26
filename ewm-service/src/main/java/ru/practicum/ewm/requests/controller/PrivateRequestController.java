@@ -1,9 +1,10 @@
-package ru.practicum.ewm.requests;
+package ru.practicum.ewm.requests.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.requests.RequestService;
 import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
 
 import java.util.List;
@@ -35,9 +36,9 @@ public class PrivateRequestController {
     }
 
     @GetMapping(value = "/users/{userId}/events/{eventId}/requests")
-    ParticipationRequestDto getRequestInfoByUserIdAndEventId(@PathVariable Long userId,
-                                                             @PathVariable Long eventId) {
-        return requestService.getRequestInfoByUserIdAndEventId(userId, eventId);
+    List<ParticipationRequestDto> getRequestInfoByUserIdAndEventId(@PathVariable Long userId,
+                                                                   @PathVariable Long eventId) {
+        return requestService.getRequestByUserIdAndEventId(userId, eventId);
     }
 
     @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/confirm")

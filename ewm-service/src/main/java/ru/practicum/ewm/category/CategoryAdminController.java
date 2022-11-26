@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.category.dto.NewCategoryDto;
 
 @Slf4j
 @Validated
@@ -21,7 +22,7 @@ public class CategoryAdminController {
     }
 
     @PostMapping
-    public CategoryDto createCategory(@RequestBody CategoryDto category) {
+    public CategoryDto createCategory(@RequestBody NewCategoryDto category) {
         return categoryService.createCategory(category);
     }
 

@@ -13,6 +13,7 @@ import ru.practicum.ewm.user.dao.UserDao;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,17 +33,16 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDto addNewRequest(Long userId, Long eventId) {
 
-//        Request request = new Request();
-//        request.setRequester(userDao.findById(userId).orElseThrow(() -> new WrongParameterException("Wrong User id")));
-//        request.setEvent(eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException(("Wrong event id"))));
-//        request.setCreated(LocalDateTime.now());
-//        request.setStatus(RequestStatus.PENDING);
-//
-//        requestDao.save(request);
-//
-//        return RequestMapper.requestToDto(request);
+        Request request = new Request();
+        request.setRequester(userDao.findById(userId).orElseThrow(() -> new WrongParameterException("Wrong User id")));
+        request.setEvent(eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException(("Wrong event id"))));
+        request.setCreated(LocalDateTime.now());
+        request.setStatus(RequestStatus.PENDING);
 
-        return null;
+        requestDao.save(request);
+
+        return RequestMapper.requestToDto(request);
+
     }
 
     @Transactional
@@ -62,9 +62,9 @@ public class RequestService {
         return RequestMapper.requestToDto(request);
     }
 
-    public ParticipationRequestDto getRequestInfoByUserIdAndEventId(Long userId, Long eventId) {
-        Request request = requestDao.findByEventIdAndRequesterId(eventId, userId);
-        return RequestMapper.requestToDto(request);
+    public List<ParticipationRequestDto> getRequestByUserIdAndEventId(Long userId, Long eventId) {
+        List<Request> requests = requestDao.findAllByEventIdAndRequesterId(eventId, ++userId); // TODO
+        return RequestMapper.requestDtoList(requests);
     }
 
     @Transactional

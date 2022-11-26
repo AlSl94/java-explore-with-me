@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.category.dao.CategoryDao;
 import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.category.dto.NewCategoryDto;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.error.WrongParameterException;
 import ru.practicum.ewm.utility.FromSizeRequest;
@@ -36,8 +37,8 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto createCategory(CategoryDto categoryDto) {
-        Category category = CategoryMapper.toCategory(categoryDto);
+    public CategoryDto createCategory(NewCategoryDto categoryDto) {
+        Category category = CategoryMapper.toCategoryFromNew(categoryDto);
         category = categoryDao.save(category);
         return CategoryMapper.toCategoryDto(category);
     }

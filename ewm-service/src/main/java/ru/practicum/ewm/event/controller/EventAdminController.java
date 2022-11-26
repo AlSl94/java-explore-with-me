@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.event.EventService;
 import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.event.dto.EventFullDto;
-import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -23,14 +21,17 @@ public class EventAdminController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventFullDto> getEvents(@RequestParam(required = false) List<Long> users,
-                                         @RequestParam(required = false) List<EventState> states,
-                                         @RequestParam(required = false) List<Long> categories,
-                                         @RequestParam(required = false) String rangeStart,
-                                         @RequestParam(required = false) String rangeEnd,
-                                         @RequestParam(required = false, defaultValue = "0") int from,
-                                         @RequestParam(required = false, defaultValue = "10") int size) {
-        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+    public List<EventFullDto> getEventsAdmin(@RequestParam(required = false) List<Long> users,
+                                             @RequestParam(required = false) List<EventState> states,
+                                             @RequestParam(required = false) List<Long> categories,
+                                             @RequestParam(required = false) String rangeStart,
+                                             @RequestParam(required = false) String rangeEnd,
+                                             @RequestParam(required = false, defaultValue = "0") int from,
+                                             @RequestParam(required = false, defaultValue = "10") int size) {
+        List<EventFullDto> events =  eventService.getEventsAdmin(users,
+                states, categories, rangeStart, rangeEnd, from, size);
+        log.info("Администратором получен список событий {}", events.toString());
+        return events;
     }
 
     @PutMapping(value = "/{eventId}")

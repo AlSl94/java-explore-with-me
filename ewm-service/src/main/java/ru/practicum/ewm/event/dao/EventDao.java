@@ -20,6 +20,26 @@ public interface EventDao extends JpaRepository<Event, Long> {
             "AND e.state IN ?2 " +
             "AND e.category.id IN ?3 " +
             "AND e.eventDate BETWEEN ?4 AND ?5")
-    List<Event> findEvents(List<Long> users, List<EventState> states, List<Long> categories,
-                           LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
+    List<Event> adminFindEvents(List<Long> users, List<EventState> states, List<Long> categories,
+                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.initiator.id IN ?1 " +
+            "AND e.category.id IN ?2 " +
+            "AND e.eventDate BETWEEN ?3 AND ?4")
+    List<Event> adminFindEventsTest(List<Long> users, List<Long> categories,
+                                LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = ru.practicum.ewm.event.EventState.PUBLISHED " +
+            "AND e.annotation LIKE CONCAT('%',?1,'%') OR e.description LIKE CONCAT('%',?1,'%') " +
+            "AND e.category.id IN ?2 " +
+            "AND e.paid = ?3 " +
+            "AND e.eventDate BETWEEN ?4 AND ?5 " +
+            "AND (?6 = true AND e.participantLimit = 0) OR " +
+            "(?6 = true AND e.participantLimit > e.confirmedRequests) OR " +
+            "(?6 = false)")
+    List<Event> findEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
+                           LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable pageable);
+
 }

@@ -109,14 +109,15 @@ public class EventService {
     }
 
 
-    public List<EventFullDto> getEvents(List<Long> users, List<EventState> states, List<Long> categories,
-                                         String rangeStart, String rangeEnd, int from, int size) {
+    public List<EventFullDto> getEventsAdmin(List<Long> users, List<EventState> states, List<Long> categories,
+                                             String rangeStart, String rangeEnd, int from, int size) {
         //TODO тупит обработка states
 
         Pageable pageable = FromSizeRequest.of(from, size);
         LocalDateTime start = LocalDateTime.parse(rangeStart, Constants.TIME_FORMATTER);
         LocalDateTime end = LocalDateTime.parse(rangeEnd, Constants.TIME_FORMATTER);
-        List<Event> events = eventDao.findEvents(users, states, categories, start, end, pageable);
+        //List<Event> events = eventDao.adminFindEvents(users, states, categories, start, end, pageable);
+        List<Event> events = eventDao.adminFindEventsTest(users, categories, start, end, pageable);
 
         return EventMapper.toFullEventDtoList(events);
     }
@@ -164,6 +165,22 @@ public class EventService {
         Event event = eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException("Неверный id события"));
         event.setState(EventState.REJECTED);
 
+        return EventMapper.toFullEventDto(event);
+    }
+
+    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
+                                         String rangeStart, String rangeEnd, Boolean onlyAvailable,
+                                         String sort, int from, int size) {
+
+        LocalDateTime start = LocalDateTime.parse(rangeStart, Constants.TIME_FORMATTER);
+        LocalDateTime end = LocalDateTime.parse(rangeEnd, Constants.TIME_FORMATTER);
+        Pageable pageable = FromSizeRequest.of(from, size);
+        List<Event> events = eventDao.findEvents(text, categories, paid, start, end, onlyAvailable, pageable);
+        return EventMapper.toShortEventDtoList(events);
+    }
+
+    public EventFullDto getEventById(Long eventId) {
+        Event event = eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException("Неверный id события"));
         return EventMapper.toFullEventDto(event);
     }
 }
