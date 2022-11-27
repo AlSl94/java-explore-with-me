@@ -28,7 +28,7 @@ public class EventAdminController {
                                              @RequestParam(required = false) String rangeEnd,
                                              @RequestParam(required = false, defaultValue = "0") int from,
                                              @RequestParam(required = false, defaultValue = "10") int size) {
-        List<EventFullDto> events =  eventService.getEventsAdmin(users,
+        List<EventFullDto> events = eventService.getEventsAdmin(users,
                 states, categories, rangeStart, rangeEnd, from, size);
         log.info("Администратором получен список событий {}", events.toString());
         return events;

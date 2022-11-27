@@ -8,7 +8,9 @@ import ru.practicum.ewm.category.dao.CategoryDao;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
 import ru.practicum.ewm.category.model.Category;
-import ru.practicum.ewm.error.WrongParameterException;
+import ru.practicum.ewm.error.AlreadyExistsException;
+import ru.practicum.ewm.error.NotFoundException;
+import ru.practicum.ewm.error.ValidationException;
 import ru.practicum.ewm.utility.FromSizeRequest;
 
 import java.util.List;
@@ -23,24 +25,38 @@ public class CategoryService {
     @Transactional
     public CategoryDto updateCategory(CategoryDto categoryDto) {
 
+        if (categoryDto.getName() == null && categoryDto.getId() == null) {
+            throw new ValidationException("Wrong body");
+        }
+
         Category category = categoryDao.findById(categoryDto.getId())
-                .orElseThrow(() ->
-                        new WrongParameterException("Категория с id {" + categoryDto.getId() + "} не найдена"));
+                .orElseThrow(() -> new NotFoundException("Category {" + categoryDto.getId() + "} not found"));
 
         if (categoryDto.getName() != null) {
             category.setName(categoryDto.getName());
         }
-
-        category = categoryDao.save(category);
-
-        return CategoryMapper.toCategoryDto(category);
+        try {
+            category = categoryDao.saveAndFlush(category);
+            return CategoryMapper.toCategoryDto(category);
+        } catch (RuntimeException e) {
+            throw new AlreadyExistsException("Name must be unique");
+        }
     }
 
     @Transactional
     public CategoryDto createCategory(NewCategoryDto categoryDto) {
-        Category category = CategoryMapper.toCategoryFromNew(categoryDto);
-        category = categoryDao.save(category);
-        return CategoryMapper.toCategoryDto(category);
+
+        if (categoryDto.getName() == null) {
+            throw new ValidationException("Wrong body");
+        }
+
+        try {
+            Category category = CategoryMapper.toCategoryFromNew(categoryDto);
+            category = categoryDao.save(category);
+            return CategoryMapper.toCategoryDto(category);
+        } catch (RuntimeException e) {
+            throw new AlreadyExistsException("Name must be unique.");
+        }
     }
 
     @Transactional
@@ -56,7 +72,7 @@ public class CategoryService {
 
     public CategoryDto getCategoryById(Long catId) {
         Category category = categoryDao.findById(catId)
-                .orElseThrow(() -> new WrongParameterException("Категория c id {" + catId + "} не найдена"));
+                .orElseThrow(() -> new NotFoundException("Category {" + catId + "} not found"));
         return CategoryMapper.toCategoryDto(category);
     }
 }

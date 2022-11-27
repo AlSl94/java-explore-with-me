@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.error.AlreadyExistsException;
+import ru.practicum.ewm.error.ValidationException;
 import ru.practicum.ewm.user.dao.UserDao;
 import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.model.User;
@@ -30,9 +32,18 @@ public class UserService {
 
     @Transactional
     public UserDto createUser(UserDto dto) {
-        User user = UserMapper.toUser(dto);
-        user = userDao.save(user);
-        return UserMapper.toUserDto(user);
+
+        if (dto.getName() == null || dto.getEmail() == null) {
+            throw new ValidationException("Wrong body");
+        }
+
+        try {
+            User user = UserMapper.toUser(dto);
+            user = userDao.save(user);
+            return UserMapper.toUserDto(user);
+        } catch (RuntimeException e) {
+            throw new AlreadyExistsException("Name must be unique.");
+        }
     }
 
     @Transactional

@@ -11,19 +11,25 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping(path = "/compilations") // TODO
+@RequestMapping(path = "/compilations")
 @RequiredArgsConstructor
 public class CompilationController {
+
+    private final CompilationService compilationService;
 
     @GetMapping
     List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
                                          @RequestParam(required = false, defaultValue = "0") int from,
                                          @RequestParam(required = false, defaultValue = "10") int size) {
-        return null;
+        List<CompilationDto> compilations = compilationService.getCompilations(pinned, from, size);
+        log.info("Got compilation list, {}", compilations);
+        return compilations;
     }
 
     @GetMapping(value = "/{compId}")
     CompilationDto getCompilationById(@PathVariable Long compId) {
-        return null;
+        CompilationDto dto = compilationService.getCompilationById(compId);
+        log.info("Got compilation {}", dto);
+        return dto;
     }
 }

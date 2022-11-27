@@ -8,6 +8,7 @@ import ru.practicum.ewm.event.EventService;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
+import ru.practicum.ewm.event.dto.UpdateEventRequest;
 
 import java.util.List;
 
@@ -30,9 +31,9 @@ public class PrivateEventController {
     }
 
     @PatchMapping(value = "/users/{userId}/events")
-    EventShortDto updateEvent(@PathVariable Long userId,
-                              @RequestBody EventShortDto event) {
-        EventShortDto dto = eventService.updateEvent(userId, event);
+    EventFullDto updateEvent(@PathVariable Long userId,
+                             @RequestBody UpdateEventRequest event) {
+        EventFullDto dto = eventService.updateEventRequest(userId, event);
         log.info("Обновлено событие, {}", dto);
         return dto;
     }

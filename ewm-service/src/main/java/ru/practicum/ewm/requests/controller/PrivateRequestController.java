@@ -45,13 +45,13 @@ public class PrivateRequestController {
     ParticipationRequestDto confirmParticipationRequest(@PathVariable Long userId,
                                                         @PathVariable Long eventId,
                                                         @PathVariable Long reqId) {
-        return requestService.confirmParticipationRequest(userId, eventId, reqId);
+        return requestService.confirmRequest(userId, eventId, reqId);
     }
 
     @PatchMapping(value = "/users/{userId}/events/{eventId}/requests/{reqId}/reject")
     ParticipationRequestDto rejectParticipationRequest(@PathVariable Long userId,
                                                        @PathVariable Long eventId,
                                                        @PathVariable Long reqId) {
-        return requestService.rejectParticipationRequest(userId, eventId, reqId);
+        return requestService.rejectRequest(userId, eventId, reqId);
     }
 }

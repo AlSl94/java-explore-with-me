@@ -1,11 +1,13 @@
 package ru.practicum.ewm.compilation.model;
 
 import lombok.*;
+import ru.practicum.ewm.event.model.Event;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "compilations")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,4 +22,8 @@ public class Compilation {
     private String title;
     @Column
     private Boolean pinned;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "events_compilations", joinColumns = @JoinColumn(name = "compilation_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private Set<Event> events;
 }

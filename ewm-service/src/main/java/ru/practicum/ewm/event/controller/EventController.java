@@ -29,7 +29,7 @@ public class EventController {
                                   @RequestParam(required = false) String sort,
                                   @RequestParam(required = false, defaultValue = "0") int from,
                                   @RequestParam(required = false, defaultValue = "10") int size) {
-        List<EventShortDto> events =  eventService.getEvents(text, categories, paid, rangeStart,
+        List<EventShortDto> events = eventService.getEvents(text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, sort, from, size);
         log.info("Получен список событий {}", events.toString());
         return events;

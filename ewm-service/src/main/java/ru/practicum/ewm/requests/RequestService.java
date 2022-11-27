@@ -3,8 +3,12 @@ package ru.practicum.ewm.requests;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.error.ForbiddenException;
+import ru.practicum.ewm.error.NotFoundException;
 import ru.practicum.ewm.error.WrongParameterException;
+import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.event.dao.EventDao;
+import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.requests.dao.RequestDao;
 import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
 import ru.practicum.ewm.requests.model.Request;
@@ -13,7 +17,6 @@ import ru.practicum.ewm.user.dao.UserDao;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,8 +37,10 @@ public class RequestService {
     public ParticipationRequestDto addNewRequest(Long userId, Long eventId) {
 
         Request request = new Request();
-        request.setRequester(userDao.findById(userId).orElseThrow(() -> new WrongParameterException("Wrong User id")));
-        request.setEvent(eventDao.findById(eventId).orElseThrow(() -> new WrongParameterException(("Wrong event id"))));
+        request.setRequester(userDao.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Wrong User id")));
+        request.setEvent(eventDao.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(("Wrong event id"))));
         request.setCreated(LocalDateTime.now());
         request.setStatus(RequestStatus.PENDING);
 
@@ -45,14 +50,19 @@ public class RequestService {
 
     }
 
+    public List<ParticipationRequestDto> getRequestByUserIdAndEventId(Long userId, Long eventId) {
+        List<Request> requests = requestDao.findAllByEventIdAndRequesterId(eventId, ++userId);
+        return RequestMapper.requestDtoList(requests);
+    }
+
     @Transactional
     public ParticipationRequestDto cancelRequest(Long reqId, Long userId) {
 
         Request request = requestDao.findById(reqId)
-                .orElseThrow(() -> new WrongParameterException("Запрос с id " + reqId + " не найден"));
+                .orElseThrow(() -> new NotFoundException("Request " + reqId + " not found"));
 
         if (!Objects.equals(request.getRequester().getId(), userId)) {
-            throw new WrongParameterException("Пользователь с id " + userId + " создателем запроса");
+            throw new WrongParameterException("User" + userId + " must be creator");
         }
 
         request.setStatus(RequestStatus.CANCELED);
@@ -62,24 +72,56 @@ public class RequestService {
         return RequestMapper.requestToDto(request);
     }
 
-    public List<ParticipationRequestDto> getRequestByUserIdAndEventId(Long userId, Long eventId) {
-        List<Request> requests = requestDao.findAllByEventIdAndRequesterId(eventId, ++userId); // TODO
-        return RequestMapper.requestDtoList(requests);
-    }
-
     @Transactional
-    public ParticipationRequestDto confirmParticipationRequest(Long userId, Long eventId, Long reqId) { //todo validation
-        Request request = requestDao.findByEventIdAndRequesterIdAndId(eventId, userId, reqId);
+    public ParticipationRequestDto confirmRequest(Long userId, Long eventId, Long reqId) {
+
+        userDao.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
+
+        Request request = requestDao.findById(reqId)
+                .orElseThrow(() -> new NotFoundException("Запрос с id " + reqId + " не найден"));
+
+        Event event = eventDao.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с id = " + eventId + " не найдено"));
+
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ForbiddenException("Может быть подтвержден только создателем события");
+        }
+        if (!event.getState().equals(EventState.PUBLISHED)) {
+            throw new ForbiddenException("Нельзя подвердить участие в неопубликованном событии");
+        }
+        if (Objects.equals(event.getConfirmedRequests(), event.getParticipantLimit())) {
+            throw new ForbiddenException("Количество участников превышено");
+        }
+
         request.setStatus(RequestStatus.CONFIRMED);
         request = requestDao.save(request);
+
         return RequestMapper.requestToDto(request);
     }
 
     @Transactional
-    public ParticipationRequestDto rejectParticipationRequest(Long userId, Long eventId, Long reqId) { // todo
-        Request request = requestDao.findByEventIdAndRequesterIdAndId(eventId, userId, reqId);
+    public ParticipationRequestDto rejectRequest(Long userId, Long eventId, Long reqId) {
+
+        userDao.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
+
+        Request request = requestDao.findById(reqId)
+                .orElseThrow(() -> new WrongParameterException("Запрос с id " + reqId + " не найден"));
+
+        Event event = eventDao.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с id = " + eventId + " не найдено"));
+
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ForbiddenException("Может быть отклонено только создателем события");
+        }
+        if (!event.getState().equals(EventState.PUBLISHED)) {
+            throw new ForbiddenException("Нельзя отклонить участие в неопубликованном событии");
+        }
+
         request.setStatus(RequestStatus.REJECTED);
         request = requestDao.save(request);
+
         return RequestMapper.requestToDto(request);
     }
 }

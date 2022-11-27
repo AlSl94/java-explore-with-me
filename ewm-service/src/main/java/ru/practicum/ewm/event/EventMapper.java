@@ -12,7 +12,9 @@ import ru.practicum.ewm.utility.Constants;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class EventMapper {
@@ -43,9 +45,9 @@ public class EventMapper {
     public static EventShortDto toEventShortDto(Event event) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
-                .category(event.getCategory().getId())
+                .category(CategoryMapper.toCategoryDto(event.getCategory()))
                 .confirmedRequests(event.getConfirmedRequests())
-                .eventDate(event.getEventDate())
+                .eventDate(event.getEventDate().format(Constants.TIME_FORMATTER))
                 .id(event.getId())
                 .initiator(UserMapper.toShortUserDto(event.getInitiator()))
                 .paid(event.getPaid())
@@ -67,25 +69,6 @@ public class EventMapper {
                 .build();
     }
 
-    public static Event toEvent(EventFullDto eventDto) {
-        return Event.builder()
-                .id(eventDto.getId())
-                .annotation(eventDto.getAnnotation())
-                .description(eventDto.getDescription())
-                .category(CategoryMapper.toCategory(eventDto.getCategory()))
-                .title(eventDto.getTitle())
-                .publishedOn(LocalDateTime.parse(eventDto.getPublishedOn(), Constants.TIME_FORMATTER))
-                .eventDate(LocalDateTime.parse(eventDto.getEventDate(), Constants.TIME_FORMATTER))
-                .initiator(UserMapper.toUserFromShortDto(eventDto.getInitiator()))
-                .lat(eventDto.getLocation().getLat())
-                .lon(eventDto.getLocation().getLon())
-                .paid(eventDto.getPaid())
-                .participantLimit(eventDto.getParticipantLimit())
-                .requestModeration(eventDto.getRequestModeration())
-                .state(eventDto.getState())
-                .build();
-    }
-
     public static List<EventShortDto> toShortEventDtoList(Iterable<Event> events) {
         List<EventShortDto> result = new ArrayList<>();
         for (Event event : events) {
@@ -101,4 +84,13 @@ public class EventMapper {
         }
         return result;
     }
+
+    public static Set<EventShortDto> toShortEventDtoSet(Iterable<Event> events) {
+        Set<EventShortDto> result = new HashSet<>();
+        for (Event event : events) {
+            result.add(toEventShortDto(event));
+        }
+        return result;
+    }
+
 }
