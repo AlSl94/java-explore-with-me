@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS events
     confirmed_requests INT                         NOT NULL,
     category_id        BIGINT
         CONSTRAINT fk_events_categories_index REFERENCES categories (id) ON DELETE CASCADE,
-    title              VARCHAR(70)                 NOT NULL,
+    title              VARCHAR(200)                 NOT NULL,
     published_on       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     event_date         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     initiator_id       BIGINT                      NOT NULL
