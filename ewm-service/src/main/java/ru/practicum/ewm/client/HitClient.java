@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.ewm.client.dto.EndPointHit;
 
-
 @Service
 @Slf4j
 public class HitClient extends BaseClient {
