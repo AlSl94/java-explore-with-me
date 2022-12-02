@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder(toBuilder = true)
+@ToString
 public class ParticipationRequestDto {
     private LocalDateTime created;
     private Long event;

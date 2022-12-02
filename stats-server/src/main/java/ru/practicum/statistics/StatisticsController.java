@@ -22,7 +22,7 @@ public class StatisticsController {
 
     @PostMapping("/hit")
     public void addHit(@RequestBody EndPointHit endpointHit) {
-        service.addStats(endpointHit);
+        service.addHit(endpointHit);
     }
 
     @GetMapping("/stats")
@@ -30,6 +30,18 @@ public class StatisticsController {
                                          @RequestParam(name = "end") @NotNull String end,
                                          @RequestParam(name = "uris") List<String> uris,
                                          @RequestParam(name = "unique", defaultValue = "false") Boolean unique) {
-        return service.getStatistics(start, end, uris, unique);
+        List<ViewStats> stats = service.getStatistic(start, end, uris, unique);
+        log.info("Got statistic, {}", stats.toString());
+        return stats;
     }
+
+    @GetMapping("/views")
+    public List<ViewStats> getEventViews(@RequestParam String start, @RequestParam String end,
+                                         @RequestParam(required = false) List<String> uris,
+                                         @RequestParam(defaultValue = "false") Boolean unique) {
+        List<ViewStats> eventViews = service.getEventViews(start, end, uris, unique);
+        log.info("Получена статистика по просмотрам");
+        return eventViews;
+    }
+
 }

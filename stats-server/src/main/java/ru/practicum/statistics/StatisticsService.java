@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.statistics.dao.StatisticDao;
 import ru.practicum.statistics.dto.EndPointHit;
 import ru.practicum.statistics.dto.ViewStats;
-import ru.practicum.statistics.error.ValidateException;
 import ru.practicum.statistics.mapper.EndPointHitMapper;
 import ru.practicum.statistics.model.Hit;
 import ru.practicum.statistics.utility.Constants;
@@ -19,43 +18,30 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class StatisticsService {
-
     private final StatisticDao statDao;
 
-    public void addStats(EndPointHit endPointHit) {
-        Hit hit = EndPointHitMapper.toHit(endPointHit);
-        statDao.save(hit);
+    public List<ViewStats> getStatistic(String start, String end, List<String> uris, Boolean unique) {
+        List<Hit> hits = statDao.findAllByTimestampBetweenAndUriIn(LocalDateTime
+                .parse(start, Constants.TIME_FORMATTER), LocalDateTime.parse(end, Constants.TIME_FORMATTER), uris);
+        List<ViewStats> viewStats = new ArrayList<>();
+
+        for (Hit hit : hits) {
+            Integer hitCount;
+            if (unique) {
+                hitCount = statDao.findHitCountByUriWithUniqueIp(hit.getUri());
+            } else {
+                hitCount = statDao.findHitCountByUri(hit.getUri());
+            }
+            viewStats.add(new ViewStats(hit.getApp(), hit.getUri(), hitCount));
+        }
+        return viewStats;
     }
 
-    public List<ViewStats> getStatistics(String start, String end, List<String> uris, Boolean unique) {
+    public void addHit(EndPointHit endpointHit) {
+        statDao.save(EndPointHitMapper.toHit(endpointHit));
+    }
 
-        LocalDateTime rangeStart = LocalDateTime.parse(start, Constants.TIME_FORMATTER);
-        LocalDateTime rangeEnd = LocalDateTime.parse(start, Constants.TIME_FORMATTER);
-
-        String app = "service";
-
-        List<ViewStats> views = new ArrayList<>();
-        ViewStats viewStats = new ViewStats(null, null, 0L);
-
-        if (uris.isEmpty()) {
-            throw new ValidateException("Uris for counting stats not passed");
-        }
-
-        if (Boolean.TRUE.equals(unique)) {
-            for (String uri : uris) {
-                viewStats.setUri(uri);
-                viewStats.setApp(app);
-                viewStats.setHits(statDao.getUniqueStatistics(rangeStart, rangeEnd, uri));
-                views.add(viewStats);
-            }
-        } else {
-            for (String uri : uris) {
-                viewStats.setUri(uri);
-                viewStats.setApp(app);
-                viewStats.setHits(statDao.getStatistics(rangeStart, rangeEnd, uri));
-                views.add(viewStats);
-            }
-        }
-        return views;
+    public List<ViewStats> getEventViews(String start, String end, List<String> uris, Boolean unique) {
+        return getStatistic(start, end, uris, unique);
     }
 }

@@ -25,7 +25,7 @@ public class PrivateEventController {
     List<EventShortDto> initiatorEvents(@PathVariable Long userId,
                                         @RequestParam(defaultValue = "0") int from,
                                         @RequestParam(defaultValue = "10") int size) {
-        List<EventShortDto> events = eventService.initiatorEvents(userId, from, size);
+        List<EventShortDto> events = eventService.findEventsByInitiatorId(userId, from, size);
         log.info("Получены события {} пользователя {}", events, userId);
         return events;
     }

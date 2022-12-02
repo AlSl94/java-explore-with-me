@@ -30,22 +30,28 @@ public class EventAdminController {
                                              @RequestParam(required = false, defaultValue = "10") int size) {
         List<EventFullDto> events = eventService.getEventsAdmin(users,
                 states, categories, rangeStart, rangeEnd, from, size);
-        log.info("Администратором получен список событий {}", events.toString());
+        log.info("Admin got events list {}", events.toString());
         return events;
     }
 
     @PutMapping(value = "/{eventId}")
     public EventFullDto adminUpdateEvent(@PathVariable Long eventId, @RequestBody NewEventDto eventDto) {
-        return eventService.adminUpdateEvent(eventId, eventDto);
+        EventFullDto dto = eventService.adminUpdateEvent(eventId, eventDto);
+        log.info("Admin updated event, {}", dto);
+        return dto;
     }
 
     @PatchMapping(value = "/{eventId}/publish")
     public EventFullDto publishEvent(@PathVariable Long eventId) {
-        return eventService.publishEvent(eventId);
+        EventFullDto dto = eventService.publishEvent(eventId);
+        log.info("Admin published event, {}", dto);
+        return dto;
     }
 
     @PatchMapping(value = "/{eventId}/reject")
     public EventFullDto rejectEvent(@PathVariable Long eventId) {
-        return eventService.rejectEvent(eventId);
+        EventFullDto dto = eventService.rejectEvent(eventId);
+        log.info("Admin rejected event, {}", dto);
+        return dto;
     }
 }

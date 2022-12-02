@@ -20,11 +20,15 @@ public class CategoryController {
     @GetMapping
     List<CategoryDto> getCategories(@RequestParam(required = false, defaultValue = "0") int from,
                                     @RequestParam(required = false, defaultValue = "10") int size) {
-        return categoryService.getCategories(from, size);
+        List<CategoryDto> categories = categoryService.getCategories(from, size);
+        log.info("Got categories list, {}", categories.toString());
+        return categories;
     }
 
     @GetMapping(value = "/{catId}")
     CategoryDto getCategoryById(@PathVariable Long catId) {
-        return categoryService.getCategoryById(catId);
+        CategoryDto dto = categoryService.getCategoryById(catId);
+        log.info("Got category, {}", dto);
+        return dto;
     }
 }

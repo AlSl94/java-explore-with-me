@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface EventDao extends JpaRepository<Event, Long> {
 
-    List<Event> findByInitiatorId(Long initiatorId, Pageable pageable);
+    List<Event> findEventsByInitiatorId(Long initiatorId, Pageable pageable);
 
     Event findByIdAndInitiatorId(Long eventId, Long initiatorId);
 
@@ -36,4 +36,15 @@ public interface EventDao extends JpaRepository<Event, Long> {
             "OR (?6 = false))")
     List<Event> findEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                            LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.state = ru.practicum.ewm.event.EventState.PUBLISHED " +
+            "AND e.category.id IN ?1 " +
+            "AND e.paid = ?2 " +
+            "AND e.eventDate BETWEEN ?3 AND ?4 " +
+            "AND ((?5 = true AND e.participantLimit = 0) " +
+            "OR (?5 = true AND e.participantLimit > e.confirmedRequests) " +
+            "OR (?5 = false))")
+    List<Event> findEventsWithoutText(List<Long> categories, Boolean paid, LocalDateTime rangeStart,
+                                      LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable pageable);
 }

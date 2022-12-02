@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users
 (
     id    BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-    name  VARCHAR(255)                        NOT NULL,
-    email VARCHAR(255)                        NOT NULL,
+    name  VARCHAR(50)                         NOT NULL,
+    email VARCHAR(90)                         NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id),
     CONSTRAINT uq_user_name UNIQUE (name),
     CONSTRAINT uq_user_email UNIQUE (email)
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS categories
 (
     id   BIGINT GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(50) NOT NULL,
     CONSTRAINT pk_category PRIMARY KEY (id),
     CONSTRAINT uq_category_name UNIQUE (name)
 );
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS categories
 CREATE TABLE IF NOT EXISTS compilations
 (
     id     BIGINT GENERATED ALWAYS AS IDENTITY,
-    title  VARCHAR(255) NOT NULL,
-    pinned BOOLEAN      NOT NULL,
+    title  VARCHAR(80) NOT NULL,
+    pinned BOOLEAN     NOT NULL,
     CONSTRAINT pk_compilation PRIMARY KEY (id),
     CONSTRAINT uq_compilation_title UNIQUE (title)
 );
@@ -29,11 +29,11 @@ CREATE TABLE IF NOT EXISTS events
 (
     id                 BIGINT GENERATED ALWAYS AS IDENTITY,
     annotation         VARCHAR(1000)               NOT NULL,
-    description        VARCHAR(9999)               NOT NULL,
+    description        VARCHAR(8000)               NOT NULL,
     confirmed_requests INT                         NOT NULL,
     category_id        BIGINT
         CONSTRAINT fk_events_categories_index REFERENCES categories (id) ON DELETE CASCADE,
-    title              VARCHAR(255)                NOT NULL,
+    title              VARCHAR(70)                 NOT NULL,
     published_on       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     event_date         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     initiator_id       BIGINT                      NOT NULL
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS events
     paid               BOOLEAN                     NOT NULL,
     participant_limit  INT                         NOT NULL,
     request_moderation BOOLEAN                     NOT NULL,
-    state              VARCHAR(255)                NOT NULL,
+    state              VARCHAR(40)                 NOT NULL,
     CONSTRAINT pk_event PRIMARY KEY (id)
 );
 

@@ -2,22 +2,20 @@ package ru.practicum.statistics.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import ru.practicum.statistics.model.Hit;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Repository
 public interface StatisticDao extends JpaRepository<Hit, Long> {
-    @Query("SELECT count(h) FROM Hit h " +
-            "WHERE h.timestamp >= ?1 " +
-            "AND h.timestamp <= ?2 " +
-            "AND h.uri LIKE ?3")
-    Long getStatistics(LocalDateTime start, LocalDateTime end, String uri);
 
-    @Query("SELECT count(h) FROM Hit h " +
-            "WHERE h.timestamp >= ?1 " +
-            "AND h.timestamp <= ?2 " +
-            "AND h.uri LIKE ?3 ORDER BY h.ip")
-    Long getUniqueStatistics(LocalDateTime start, LocalDateTime end, String uri);
+    List<Hit> findAllByTimestampBetweenAndUriIn(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    @Query("SELECT COUNT (ip) FROM Hit " +
+            "WHERE uri = ?1")
+    Integer findHitCountByUri(String uri);
+
+    @Query("SELECT COUNT (DISTINCT ip) FROM Hit " +
+            "WHERE uri = ?1")
+    Integer findHitCountByUriWithUniqueIp(String uri);
 }

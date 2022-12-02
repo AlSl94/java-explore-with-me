@@ -1,4 +1,4 @@
-package ru.practicum.statistics.dto;
+package ru.practicum.ewm.client.dto;
 
 import lombok.*;
 
@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class ViewStats {
 
     @NotBlank
@@ -18,5 +17,5 @@ public class ViewStats {
     @NotBlank
     private String uri;
     @NotBlank
-    private Integer hits;
+    private Long hits;
 }

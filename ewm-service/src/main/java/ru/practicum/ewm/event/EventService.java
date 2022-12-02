@@ -35,11 +35,10 @@ public class EventService {
     private final CategoryService categoryService;
     private final UserDao userDao;
 
-
-    public List<EventShortDto> initiatorEvents(Long userId, int from, int size) {
+    public List<EventShortDto> findEventsByInitiatorId(Long userId, int from, int size) {
         Pageable pageable = FromSizeRequest.of(from, size);
 
-        List<Event> events = eventDao.findByInitiatorId(userId, pageable);
+        List<Event> events = eventDao.findEventsByInitiatorId(userId, pageable);
 
         return EventMapper.toShortEventDtoList(events);
     }
@@ -211,7 +210,7 @@ public class EventService {
                                          String sort, int from, int size) {
 
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().plusDays(1);
 
         if (rangeStart != null) {
             start = LocalDateTime.parse(rangeStart, Constants.TIME_FORMATTER);
@@ -221,17 +220,18 @@ public class EventService {
             end = LocalDateTime.parse(rangeEnd, Constants.TIME_FORMATTER);
         }
 
-        if (text == null) {
-            text = "";
-        }
-
         if (categories == null) {
             categories = new ArrayList<>();
         }
 
         Pageable pageable = FromSizeRequest.of(from, size);
+        List<Event> events;
 
-        List<Event> events = eventDao.findEvents(text, categories, paid, start, end, onlyAvailable, pageable);
+        if (text == null) {
+            events = eventDao.findEventsWithoutText(categories, paid, start, end, onlyAvailable, pageable);
+        } else {
+            events = eventDao.findEvents(text, categories, paid, start, end, onlyAvailable, pageable);
+        }
 
         if (Objects.equals(sort, "EVENT_DATE")) {
             events = events

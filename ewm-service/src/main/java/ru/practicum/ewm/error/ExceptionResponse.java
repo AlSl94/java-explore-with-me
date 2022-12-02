@@ -4,10 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class ExceptionResponse {
-    String error;
-    String description;
-
-    ErrorState status;
+    private final String error;
+    private final String description;
+    private final ErrorState status;
 
     public ExceptionResponse(String error, String description, ErrorState status) {
         this.error = error;

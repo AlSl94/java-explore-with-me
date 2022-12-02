@@ -10,6 +10,7 @@ import ru.practicum.ewm.user.dto.UserShortDto;
 @Getter
 @Setter
 @Builder(toBuilder = true)
+@ToString
 public class EventFullDto {
     private String annotation;
     private CategoryDto category;
@@ -26,5 +27,5 @@ public class EventFullDto {
     private Boolean requestModeration;
     private EventState state;
     private String title;
-    private Integer views;
+    private Long views;
 }

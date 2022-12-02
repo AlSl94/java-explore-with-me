@@ -1,4 +1,4 @@
-package ru.practicum.statistics.dto;
+package ru.practicum.ewm.client.dto;
 
 import lombok.*;
 
@@ -19,5 +19,5 @@ public class EndPointHit {
     @NotBlank
     private String ip;
     private String timestamp;
-    private Integer hits;
+    private Long hits;
 }

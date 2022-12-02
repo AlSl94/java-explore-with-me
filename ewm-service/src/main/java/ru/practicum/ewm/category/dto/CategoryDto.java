@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder(toBuilder = true)
+@ToString
 public class CategoryDto {
     private Long id;
     private String name;
