@@ -25,7 +25,7 @@ public class HitClient extends BaseClient {
         );
     }
 
-    public void addHit(EndPointHit hit) {
-        post("/hit", hit);
+    public ResponseEntity<Object> addHit(EndPointHit hit) {
+        return post("/hit", hit);
     }
 }
