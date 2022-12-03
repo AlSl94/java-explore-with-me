@@ -75,23 +75,16 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDto confirmRequest(Long userId, Long eventId, Long reqId) {
 
-        userDao.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
-
         Request request = requestDao.findById(reqId)
-                .orElseThrow(() -> new NotFoundException("Запрос с id " + reqId + " не найден"));
+                .orElseThrow(() -> new WrongParameterException("Request " + reqId + " not found"));
 
         Event event = eventDao.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Событие с id = " + eventId + " не найдено"));
+                .orElseThrow(() -> new NotFoundException("Event " + eventId + " not found"));
 
-        if (!event.getInitiator().getId().equals(userId)) {
-            throw new ForbiddenException("Может быть подтвержден только создателем события");
-        }
-        if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new ForbiddenException("Нельзя подвердить участие в неопубликованном событии");
-        }
+        requestChecker(userId, event);
+
         if (Objects.equals(event.getConfirmedRequests(), event.getParticipantLimit())) {
-            throw new ForbiddenException("Количество участников превышено");
+            throw new ForbiddenException("Can't exceed participation limit");
         }
 
         request.setStatus(RequestStatus.CONFIRMED);
@@ -103,25 +96,30 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDto rejectRequest(Long userId, Long eventId, Long reqId) {
 
-        userDao.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
-
         Request request = requestDao.findById(reqId)
                 .orElseThrow(() -> new WrongParameterException("Запрос с id " + reqId + " не найден"));
 
         Event event = eventDao.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id = " + eventId + " не найдено"));
 
-        if (!event.getInitiator().getId().equals(userId)) {
-            throw new ForbiddenException("Может быть отклонено только создателем события");
-        }
-        if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new ForbiddenException("Нельзя отклонить участие в неопубликованном событии");
-        }
+        requestChecker(userId, event);
 
         request.setStatus(RequestStatus.REJECTED);
         request = requestDao.save(request);
 
         return RequestMapper.requestToDto(request);
+    }
+
+    private void requestChecker(Long userId, Event event) {
+
+        userDao.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User " + userId + " not found"));
+
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ForbiddenException("User must be creator");
+        }
+        if (!event.getState().equals(EventState.PUBLISHED)) {
+            throw new ForbiddenException("Event is not published");
+        }
     }
 }

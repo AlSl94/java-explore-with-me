@@ -44,7 +44,7 @@ public class EventService {
     }
 
     @Transactional
-    public EventFullDto updateEventRequest(Long userId, UpdateEventRequest eventDto) {
+    public EventFullDto updateEvent(Long userId, UpdateEventRequest eventDto) {
 
         Event event = eventDao.findById(eventDto.getEventId())
                 .orElseThrow(() -> new NotFoundException("Event " + eventDto.getEventId() + " not found"));
