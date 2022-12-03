@@ -27,7 +27,7 @@ public class StatisticsService {
 
         for (Hit hit : hits) {
             Integer hitCount;
-            if (unique) {
+            if (Boolean.TRUE.equals(unique)) {
                 hitCount = statDao.findHitCountByUriWithUniqueIp(hit.getUri());
             } else {
                 hitCount = statDao.findHitCountByUri(hit.getUri());
@@ -41,7 +41,7 @@ public class StatisticsService {
         statDao.save(EndPointHitMapper.toHit(endpointHit));
     }
 
-    public List<ViewStats> getEventViews(String start, String end, List<String> uris, Boolean unique) {
+    public List<ViewStats> findEventViews(String start, String end, List<String> uris, Boolean unique) {
         return getStatistic(start, end, uris, unique);
     }
 }

@@ -26,21 +26,21 @@ public class EventController {
     private final HitClient hitClient;
 
     @GetMapping
-    List<EventShortDto> getEvents(@RequestParam(required = false) String text,
-                                  @RequestParam(required = false) List<Long> categories,
-                                  @RequestParam(defaultValue = "false") Boolean paid,
-                                  @RequestParam(required = false) String rangeStart,
-                                  @RequestParam(required = false) String rangeEnd,
-                                  @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-                                  @RequestParam(required = false) String sort,
-                                  @RequestParam(required = false, defaultValue = "0") int from,
-                                  @RequestParam(required = false, defaultValue = "10") int size,
-                                  HttpServletRequest request) {
-        List<EventShortDto> events = eventService.getEvents(text, categories, paid, rangeStart,
+    List<EventShortDto> findEvents(@RequestParam(required = false) String text,
+                                   @RequestParam(required = false) List<Long> categories,
+                                   @RequestParam(defaultValue = "false") Boolean paid,
+                                   @RequestParam(required = false) String rangeStart,
+                                   @RequestParam(required = false) String rangeEnd,
+                                   @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+                                   @RequestParam(required = false) String sort,
+                                   @RequestParam(required = false, defaultValue = "0") int from,
+                                   @RequestParam(required = false, defaultValue = "10") int size,
+                                   HttpServletRequest request) {
+        List<EventShortDto> events = eventService.findEvents(text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, sort, from, size);
         log.info("Got event list {}", events.toString());
         saveHit(request);
-        log.info("Added hit to event");
+        log.info("Added hit to /events/");
         return events;
     }
 

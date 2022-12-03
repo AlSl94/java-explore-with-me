@@ -61,9 +61,9 @@ CREATE TABLE IF NOT EXISTS requests
     id           BIGINT GENERATED ALWAYS AS IDENTITY,
     created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     event_id     BIGINT                      NOT NULL
-        CONSTRAINT fk_requests_events_index REFERENCES events (id),
+        CONSTRAINT fk_requests_events_index REFERENCES events (id) ON DELETE CASCADE,
     requester_id BIGINT                      NOT NULL
-        CONSTRAINT fk_requests_users_index REFERENCES users (id),
+        CONSTRAINT fk_requests_users_index REFERENCES users (id) ON DELETE CASCADE,
     status       varchar(50)                 NOT NULL,
     CONSTRAINT pk_request PRIMARY KEY (id)
 );

@@ -1,6 +1,6 @@
 package ru.practicum.ewm.category;
 
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
 import ru.practicum.ewm.category.model.Category;
@@ -8,11 +8,8 @@ import ru.practicum.ewm.category.model.Category;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@UtilityClass
 public class CategoryMapper {
-
-    private CategoryMapper() {
-    }
 
     public static CategoryDto toCategoryDto(Category category) {
         return CategoryDto.builder()

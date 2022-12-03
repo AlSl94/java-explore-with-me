@@ -36,10 +36,10 @@ public class StatisticsController {
     }
 
     @GetMapping("/views")
-    public List<ViewStats> getEventViews(@RequestParam String start, @RequestParam String end,
-                                         @RequestParam(required = false) List<String> uris,
-                                         @RequestParam(defaultValue = "false") Boolean unique) {
-        List<ViewStats> eventViews = service.getEventViews(start, end, uris, unique);
+    public List<ViewStats> findEventViews(@RequestParam String start, @RequestParam String end,
+                                          @RequestParam(required = false) List<String> uris,
+                                          @RequestParam(defaultValue = "false") Boolean unique) {
+        List<ViewStats> eventViews = service.findEventViews(start, end, uris, unique);
         log.info("Получена статистика по просмотрам");
         return eventViews;
     }

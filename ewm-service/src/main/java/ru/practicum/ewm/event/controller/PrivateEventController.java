@@ -22,9 +22,9 @@ public class PrivateEventController {
     private final EventService eventService;
 
     @GetMapping(value = "/users/{userId}/events")
-    List<EventShortDto> initiatorEvents(@PathVariable Long userId,
-                                        @RequestParam(defaultValue = "0") int from,
-                                        @RequestParam(defaultValue = "10") int size) {
+    List<EventShortDto> findEventsByInitiatorId(@PathVariable Long userId,
+                                                @RequestParam(defaultValue = "0") int from,
+                                                @RequestParam(defaultValue = "10") int size) {
         List<EventShortDto> events = eventService.findEventsByInitiatorId(userId, from, size);
         log.info("Получены события {} пользователя {}", events, userId);
         return events;
@@ -50,7 +50,7 @@ public class PrivateEventController {
     @GetMapping(value = "/users/{userId}/events/{eventId}")
     EventFullDto getEventByUserIdAndEventId(@PathVariable Long userId,
                                             @PathVariable Long eventId) {
-        EventFullDto dto = eventService.getEventByUserIdAndEventId(userId, eventId);
+        EventFullDto dto = eventService.findEventByUserIdAndEventId(userId, eventId);
         log.info("Получено событие {} по userId {} и eventId {}", dto, userId, eventId);
         return dto;
     }

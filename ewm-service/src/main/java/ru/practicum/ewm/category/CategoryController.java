@@ -18,9 +18,9 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    List<CategoryDto> getCategories(@RequestParam(required = false, defaultValue = "0") int from,
-                                    @RequestParam(required = false, defaultValue = "10") int size) {
-        List<CategoryDto> categories = categoryService.getCategories(from, size);
+    List<CategoryDto> findCategories(@RequestParam(required = false, defaultValue = "0") int from,
+                                     @RequestParam(required = false, defaultValue = "10") int size) {
+        List<CategoryDto> categories = categoryService.findCategories(from, size);
         log.info("Got categories list, {}", categories.toString());
         return categories;
     }

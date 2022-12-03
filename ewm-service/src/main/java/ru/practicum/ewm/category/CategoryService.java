@@ -64,7 +64,7 @@ public class CategoryService {
         categoryDao.deleteById(catId);
     }
 
-    public List<CategoryDto> getCategories(int from, int size) {
+    public List<CategoryDto> findCategories(int from, int size) {
         Pageable pageable = FromSizeRequest.of(from, size);
         List<Category> categories = categoryDao.findAll(pageable).getContent();
         return CategoryMapper.toCategoryDtoList(categories);

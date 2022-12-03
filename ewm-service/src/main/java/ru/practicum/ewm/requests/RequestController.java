@@ -1,10 +1,9 @@
-package ru.practicum.ewm.requests.controller;
+package ru.practicum.ewm.requests;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.requests.RequestService;
 import ru.practicum.ewm.requests.dto.ParticipationRequestDto;
 
 import java.util.List;
@@ -14,13 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
-public class PrivateRequestController {
+public class RequestController {
 
     private final RequestService requestService;
 
     @GetMapping(value = "/users/{userId}/requests")
-    public List<ParticipationRequestDto> getUserRequests(@PathVariable Long userId) {
-        List<ParticipationRequestDto> dtoList = requestService.getUserRequests(userId);
+    public List<ParticipationRequestDto> findUserRequests(@PathVariable Long userId) {
+        List<ParticipationRequestDto> dtoList = requestService.findUserRequests(userId);
         log.info("Got userRequests, {}", dtoList);
         return dtoList;
     }
@@ -42,9 +41,9 @@ public class PrivateRequestController {
     }
 
     @GetMapping(value = "/users/{userId}/events/{eventId}/requests")
-    List<ParticipationRequestDto> getRequestInfoByUserIdAndEventId(@PathVariable Long userId,
-                                                                   @PathVariable Long eventId) {
-        List<ParticipationRequestDto> dtoList = requestService.getRequestByUserIdAndEventId(userId, eventId);
+    List<ParticipationRequestDto> findRequestByUserIdAndEventId(@PathVariable Long userId,
+                                                                @PathVariable Long eventId) {
+        List<ParticipationRequestDto> dtoList = requestService.findRequestByUserIdAndEventId(userId, eventId);
         log.info("Got list {}, by userId {} and by eventId {}", dtoList, userId, eventId);
         return dtoList;
     }

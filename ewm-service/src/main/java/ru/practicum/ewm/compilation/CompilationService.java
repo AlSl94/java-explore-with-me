@@ -27,7 +27,7 @@ public class CompilationService {
     private final EventDao eventDao;
 
 
-    public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
+    public List<CompilationDto> findCompilations(Boolean pinned, int from, int size) {
         Pageable pageable = FromSizeRequest.of(from, size);
         List<Compilation> compilations = compilationDao.findByPinned(pinned, pageable).toList();
         return CompilationMapper.toCompDtoList(compilations);

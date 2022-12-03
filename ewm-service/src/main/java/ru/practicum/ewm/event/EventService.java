@@ -105,7 +105,7 @@ public class EventService {
     }
 
 
-    public EventFullDto getEventByUserIdAndEventId(Long userId, Long eventId) {
+    public EventFullDto findEventByUserIdAndEventId(Long userId, Long eventId) {
         Event event = eventDao.findByIdAndInitiatorId(eventId, userId);
         return EventMapper.toFullEventDto(event);
     }
@@ -119,8 +119,8 @@ public class EventService {
     }
 
 
-    public List<EventFullDto> getEventsAdmin(List<Long> users, List<EventState> states, List<Long> categories,
-                                             String rangeStart, String rangeEnd, int from, int size) {
+    public List<EventFullDto> adminFindEvents(List<Long> users, List<EventState> states, List<Long> categories,
+                                              String rangeStart, String rangeEnd, int from, int size) {
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now();
@@ -205,9 +205,9 @@ public class EventService {
         return EventMapper.toFullEventDto(event);
     }
 
-    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
-                                         String rangeStart, String rangeEnd, Boolean onlyAvailable,
-                                         String sort, int from, int size) {
+    public List<EventShortDto> findEvents(String text, List<Long> categories, Boolean paid,
+                                          String rangeStart, String rangeEnd, Boolean onlyAvailable,
+                                          String sort, int from, int size) {
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().plusDays(1);

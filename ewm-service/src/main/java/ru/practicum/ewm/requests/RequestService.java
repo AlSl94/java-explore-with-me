@@ -28,7 +28,7 @@ public class RequestService {
     private final EventDao eventDao;
 
 
-    public List<ParticipationRequestDto> getUserRequests(Long userId) {
+    public List<ParticipationRequestDto> findUserRequests(Long userId) {
         List<Request> requests = requestDao.findAllByRequesterId(userId);
         return RequestMapper.requestDtoList(requests);
     }
@@ -50,7 +50,7 @@ public class RequestService {
 
     }
 
-    public List<ParticipationRequestDto> getRequestByUserIdAndEventId(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> findRequestByUserIdAndEventId(Long userId, Long eventId) {
         List<Request> requests = requestDao.findAllByEventIdAndRequesterId(eventId, ++userId);
         return RequestMapper.requestDtoList(requests);
     }

@@ -21,7 +21,7 @@ public class UserService {
     private final UserDao userDao;
 
 
-    public List<UserDto> getUsers(List<Long> ids, int from, int size) {
+    public List<UserDto> findUsers(List<Long> ids, int from, int size) {
 
         Pageable pageable = FromSizeRequest.of(from, size);
 

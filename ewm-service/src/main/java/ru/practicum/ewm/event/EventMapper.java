@@ -1,6 +1,6 @@
 package ru.practicum.ewm.event;
 
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.category.CategoryMapper;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
@@ -16,11 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component
+@UtilityClass
 public class EventMapper {
-    private EventMapper() {
-
-    }
 
     public static EventFullDto toFullEventDto(Event event) {
         return EventFullDto.builder()

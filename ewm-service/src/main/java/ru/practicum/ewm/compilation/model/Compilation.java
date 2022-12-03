@@ -23,7 +23,9 @@ public class Compilation {
     @Column
     private Boolean pinned;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "events_compilations", joinColumns = @JoinColumn(name = "compilation_id"),
+    @JoinTable(name = "events_compilations",
+            joinColumns = @JoinColumn(name = "compilation_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
+    @ToString.Exclude
     private Set<Event> events;
 }
