@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS events
     confirmed_requests INT                         NOT NULL,
     category_id        BIGINT
         CONSTRAINT fk_events_categories_index REFERENCES categories (id) ON DELETE CASCADE,
-    title              VARCHAR(200)                 NOT NULL,
+    title              VARCHAR(200)                NOT NULL,
     published_on       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     event_date         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     initiator_id       BIGINT                      NOT NULL
@@ -46,6 +46,25 @@ CREATE TABLE IF NOT EXISTS events
     state              VARCHAR(40)                 NOT NULL,
     CONSTRAINT pk_event PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS events_likes
+(
+    user_id  BIGINT NOT NULL
+        CONSTRAINT fk_events_likes_users_index REFERENCES users (id) ON DELETE CASCADE,
+    event_id BIGINT NOT NULL
+        CONSTRAINT fk_events_likes_events_index REFERENCES events (id) ON DELETE CASCADE,
+    CONSTRAINT pk_events_users PRIMARY KEY (user_id, event_id)
+);
+
+CREATE TABLE IF NOT EXISTS events_dislikes
+(
+    user_id  BIGINT NOT NULL
+        CONSTRAINT fk_events_dislikes_users_index REFERENCES users (id) ON DELETE CASCADE,
+    event_id BIGINT NOT NULL
+        CONSTRAINT fk_events_dislikes_events_index REFERENCES events (id) ON DELETE CASCADE,
+    CONSTRAINT pk_events_users_dislikes PRIMARY KEY (user_id, event_id)
+);
+
 
 CREATE TABLE IF NOT EXISTS events_compilations
 (

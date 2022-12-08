@@ -10,7 +10,10 @@ import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.dto.UpdateEventRequest;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Validated
@@ -61,5 +64,57 @@ public class PrivateEventController {
         EventFullDto dto = eventService.cancelEventByUserIdAndEventId(userId, eventId);
         log.info("Отменена события {} по userId {} и eventId {}", dto, userId, eventId);
         return dto;
+    }
+
+    @PostMapping(value = "/users/{userId}/events/{eventId}/like")
+    public EventShortDto addEventLike(@PathVariable Long userId,
+                                      @PathVariable Long eventId) {
+        EventShortDto dto = eventService.addEventLike(userId, eventId);
+        log.info("User {} liked event {}", userId, eventId);
+        return dto;
+    }
+
+    @DeleteMapping(value = "/users/{userId}/events/{eventId}/unlike")
+    public EventShortDto removeEventLike(@PathVariable Long userId,
+                                         @PathVariable Long eventId) {
+        EventShortDto dto = eventService.removeEventLike(userId, eventId);
+        log.info("User {} removed like from event {}", userId, eventId);
+        return dto;
+    }
+
+    @GetMapping(value = "/users/{userId}/events/liked")
+    public Set<EventShortDto> findEventsLikedByUser(@PathVariable Long userId,
+                                                    @RequestParam(name = "from", defaultValue = "0")
+                                                    @PositiveOrZero int from,
+                                                    @RequestParam(name = "size", defaultValue = "10")
+                                                    @Positive int size) {
+        log.info("Events liked by user {}", userId);
+        return eventService.findEventsLikedByUser(userId, from, size);
+    }
+
+    @PostMapping(value = "/users/{userId}/events/{eventId}/dislike")
+    public EventShortDto addEventDislike(@PathVariable Long userId,
+                                         @PathVariable Long eventId) {
+        EventShortDto dto = eventService.addEventDislike(userId, eventId);
+        log.info("User {} disliked event {}", userId, eventId);
+        return dto;
+    }
+
+    @DeleteMapping(value = "/users/{userId}/events/{eventId}/undislike")
+    public EventShortDto removeEventDislike(@PathVariable Long userId,
+                                            @PathVariable Long eventId) {
+        EventShortDto dto = eventService.removeEventDislike(userId, eventId);
+        log.info("User {} removed dislike from event {}", userId, eventId);
+        return dto;
+    }
+
+    @GetMapping(value = "/users/{userId}/events/disliked")
+    public Set<EventShortDto> findEventsDislikedByUser(@PathVariable Long userId,
+                                                       @RequestParam(name = "from", defaultValue = "0")
+                                                       @PositiveOrZero int from,
+                                                       @RequestParam(name = "size", defaultValue = "10")
+                                                       @Positive int size) {
+        log.info("Events disliked by user {}", userId);
+        return eventService.findEventsDislikedByUser(userId, from, size);
     }
 }

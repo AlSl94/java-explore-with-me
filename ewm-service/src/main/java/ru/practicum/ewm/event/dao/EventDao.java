@@ -15,6 +15,16 @@ public interface EventDao extends JpaRepository<Event, Long> {
 
     List<Event> findEventsByInitiatorId(Long initiatorId, Pageable pageable);
 
+    @Query("SELECT e FROM Event e " +
+            "JOIN e.userLikes u " +
+            "WHERE u.id = ?1")
+    List<Event> findEventsByUserLikes(Long userId, Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "JOIN e.userDislikes u " +
+            "WHERE u.id = ?1")
+    List<Event> findEventsDislikedByUser(Long userId, Pageable pageable);
+
     Event findByIdAndInitiatorId(Long eventId, Long initiatorId);
 
     @Query("SELECT e FROM Event e " +
@@ -47,4 +57,5 @@ public interface EventDao extends JpaRepository<Event, Long> {
             "OR (?5 = false))")
     List<Event> findEventsWithoutText(List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                                       LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable pageable);
+
 }

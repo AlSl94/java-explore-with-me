@@ -36,6 +36,8 @@ public class EventMapper {
                 .requestModeration(event.getRequestModeration())
                 .state(event.getState())
                 .title(event.getTitle())
+                .userLikes(event.getUserLikes())
+                .userDislikes(event.getUserDislikes())
                 .build();
     }
 
@@ -49,6 +51,8 @@ public class EventMapper {
                 .initiator(UserMapper.toShortUserDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
+                .likes((long) event.getUserLikes().size())
+                .dislikes((long) event.getUserDislikes().size())
                 .build();
     }
 

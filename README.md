@@ -1,6 +1,6 @@
 # _REST API BACKEND SERVICE "Explore With Me"_
 #### Сервис позволяющий делиться информацией об интересных событиях и помогать найти компанию для участия в них
-https://github.com/AlSl94/java-explore-with-me/pull/1
+https://github.com/AlSl94/java-explore-with-me/pull/2
 
 ### _Используемые технологии_
 - Java 11
