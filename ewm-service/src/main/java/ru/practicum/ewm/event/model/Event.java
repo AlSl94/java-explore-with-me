@@ -7,6 +7,7 @@ import ru.practicum.ewm.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -51,4 +52,14 @@ public class Event {
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
     private EventState state;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "events_likes",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<User> userLikes;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "events_dislikes",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<User> userDislikes;
 }

@@ -74,7 +74,6 @@ public class CompilationService {
             compilation.setEvents(events);
             compilationDao.save(compilation);
         }
-
     }
 
     @Transactional
