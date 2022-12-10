@@ -316,7 +316,7 @@ public class EventService {
                 .orElseThrow(() -> new NotFoundException("Event " + eventId + " not found"));
         User user = userDao.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User " + userId + " not found"));
-        Set<User> dislikedByUser = event.getUserLikes();
+        Set<User> dislikedByUser = event.getUserDislikes();
         dislikedByUser.remove(user);
         event = eventDao.save(event);
         return EventMapper.toEventShortDto(event);

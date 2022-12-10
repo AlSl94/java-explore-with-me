@@ -74,7 +74,7 @@ public class PrivateEventController {
         return dto;
     }
 
-    @DeleteMapping(value = "/users/{userId}/events/{eventId}/unlike")
+    @DeleteMapping(value = "/users/{userId}/events/{eventId}/like")
     public EventShortDto removeEventLike(@PathVariable Long userId,
                                          @PathVariable Long eventId) {
         EventShortDto dto = eventService.removeEventLike(userId, eventId);
@@ -100,7 +100,7 @@ public class PrivateEventController {
         return dto;
     }
 
-    @DeleteMapping(value = "/users/{userId}/events/{eventId}/undislike")
+    @DeleteMapping(value = "/users/{userId}/events/{eventId}/dislike")
     public EventShortDto removeEventDislike(@PathVariable Long userId,
                                             @PathVariable Long eventId) {
         EventShortDto dto = eventService.removeEventDislike(userId, eventId);
